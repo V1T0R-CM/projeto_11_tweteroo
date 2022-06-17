@@ -19,4 +19,14 @@ app.post("/tweets", (req, res) =>{
     res.send("OK")
 });
 
+app.get("/tweets", (req, res) =>{
+    let lastTweets=[]
+    tweets.forEach((V, I)=>{
+        if(I>tweets.length-11){
+            lastTweets.push(V);
+        }
+    })
+    res.send(lastTweets)
+});
+
 app.listen(5000);
