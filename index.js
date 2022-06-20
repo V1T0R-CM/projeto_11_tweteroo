@@ -10,17 +10,28 @@ let serverUsers = [];
 let tweets = [];
 
 app.post("/sign-up", (req, res) =>{
-    serverUsers.push({id: serverUsers.length+1,...req.body});
-    res.send("OK");
+    if(!req.body.username || !req.body.avatar){
+        res.status(400).send("Todos os campos são obrigatórios!");
+    }
+    else{
+        serverUsers.push({id: serverUsers.length+1,...req.body});
+        res.status(201).send("OK");
+    }
 });
 
+
 app.post("/tweets", (req, res) =>{
-    tweets.push({id: tweets.length+1, ...req.body});
-    res.send("OK");
+    if(!req.body.username || !req.body.tweet){
+        res.status(400).send("Todos os campos são obrigatórios!");
+    }
+    else{
+        tweets.push({id: tweets.length+1, ...req.body});
+        res.status(201).send("OK");
+    }
 });
 
 app.get("/tweets", (req, res) =>{
-    let lastTweets=[]
+    let lastTweets=[];
     tweets.forEach((V, I)=>{
         if(I>tweets.length-11){
             lastTweets.push(V);
@@ -29,7 +40,7 @@ app.get("/tweets", (req, res) =>{
     for(let tweet of lastTweets){
         for(let user of serverUsers){
             if(tweet.username===user.username){
-                tweet.avatar=user.avatar
+                tweet.avatar=user.avatar;
             }
         }
     }
@@ -42,14 +53,14 @@ app.get("/tweets/:USERNAME", (req, res) =>{
     let avatar;
     for(let user of serverUsers){
         if(username===user.username){
-            avatar=user.avatar
-            break
+            avatar=user.avatar;
+            break;
         }
     }
     userTweets.map(tweet => {
-        tweet.avatar=avatar
+        tweet.avatar=avatar;
     })
-    res.send(userTweets)
+    res.send(userTweets);
 });
 
 app.listen(5000);
