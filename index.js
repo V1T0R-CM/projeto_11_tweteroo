@@ -33,8 +33,23 @@ app.get("/tweets", (req, res) =>{
             }
         }
     }
-
     res.send(lastTweets);
+});
+
+app.get("/tweets/:USERNAME", (req, res) =>{
+    const username = req.params.USERNAME;
+    let userTweets=tweets.filter(tweet => tweet.username===username);
+    let avatar;
+    for(let user of serverUsers){
+        if(username===user.username){
+            avatar=user.avatar
+            break
+        }
+    }
+    userTweets.map(tweet => {
+        tweet.avatar=avatar
+    })
+    res.send(userTweets)
 });
 
 app.listen(5000);
